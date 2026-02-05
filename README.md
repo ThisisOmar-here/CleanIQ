@@ -1,7 +1,6 @@
 <p align="center">
   <img src="static/logo.png" alt="CleanIQ Logo" width="150" height="150">
 </p>
-
 <h1 align="center">CleanIQ</h1>
 
 <p align="center">
