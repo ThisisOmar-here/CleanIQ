@@ -83,6 +83,6 @@ Thumbs.db
 .cache/
 
 # Marketing files (not needed in repo)
-Linkedin.md
 X.md
 CleanIQ Logo.png
+.agent
