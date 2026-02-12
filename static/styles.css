@@ -1,7 +1,4 @@
-/* AI Storage Saver - Apple-inspired Design System */
-
 :root {
-    /* Colors - Clean Apple Palette */
     --bg-primary: #f5f5f7;
     --bg-secondary: #ffffff;
     --bg-tertiary: #e8e8ed;
@@ -58,7 +55,6 @@ body {
     min-height: 100vh;
 }
 
-/* App Container */
 .app-container {
     display: grid;
     grid-template-columns: 280px 1fr;
@@ -66,7 +62,6 @@ body {
     position: relative;
 }
 
-/* Sidebar */
 .sidebar {
     background: var(--bg-sidebar);
     backdrop-filter: blur(20px);
@@ -75,7 +70,6 @@ body {
     display: flex;
     flex-direction: column;
     position: sticky;
-    /* Changed from fixed to sticky */
     top: 0;
     left: 0;
     width: 280px;
@@ -145,7 +139,6 @@ body {
     text-align: center;
 }
 
-/* Control Groups */
 .control-group {
     display: flex;
     flex-direction: column;
@@ -197,7 +190,6 @@ body {
     box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
 }
 
-/* Text Input */
 .text-input {
     background: var(--bg-secondary);
     border: 1px solid var(--border-medium);
@@ -223,7 +215,6 @@ body {
     color: var(--text-secondary);
 }
 
-/* Toggle Group */
 .toggle-group {
     display: flex;
     gap: 8px;
@@ -261,7 +252,6 @@ body {
     color: white;
 }
 
-/* Primary Button */
 .primary-btn {
     display: flex;
     align-items: center;
@@ -300,7 +290,6 @@ body {
     height: 18px;
 }
 
-/* Stats Panel */
 .stats-panel {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -331,14 +320,11 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Main Content */
 .main-content {
-    /* Removed margin-left: 280px; grid handles this */
     padding: 40px 48px;
     min-height: 100vh;
     position: relative;
     width: 100%;
-    /* Ensure it takes full availability of its grid cell */
 }
 
 .main-header {
@@ -371,7 +357,6 @@ body {
     line-height: 1.4;
 }
 
-/* Sort Control */
 .sort-control {
     display: flex;
     align-items: center;
@@ -413,7 +398,6 @@ body {
     box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
 }
 
-/* Checkbox Styles */
 .checkbox-label {
     display: flex;
     align-items: center;
@@ -460,7 +444,6 @@ body {
     font-weight: 500;
 }
 
-/* File Grid */
 .file-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -591,7 +574,6 @@ body {
     text-transform: uppercase;
 }
 
-/* Empty State */
 .empty-state {
     grid-column: 1 / -1;
     display: flex;
@@ -623,14 +605,12 @@ body {
     color: var(--text-secondary);
 }
 
-/* Loading Overlay */
 .loading-overlay {
     position: absolute;
     inset: 0;
     background: rgba(245, 245, 247, 0.9);
     backdrop-filter: blur(8px);
     display: flex;
-    /* Hidden by default via JS inline style */
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -753,7 +733,6 @@ body {
     overflow-y: auto;
 }
 
-/* Panel File Info */
 .panel-file-header {
     display: flex;
     align-items: center;
@@ -791,7 +770,6 @@ body {
     color: var(--text-secondary);
 }
 
-/* Panel Meta Grid */
 .panel-meta-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -821,7 +799,6 @@ body {
     color: var(--text-primary);
 }
 
-/* Panel Actions */
 .panel-actions {
     display: flex;
     flex-direction: column;
@@ -875,7 +852,6 @@ body {
     opacity: 0.9;
 }
 
-/* Summary Section */
 .summary-section {
     padding: 16px;
     background: var(--bg-primary);
@@ -918,7 +894,6 @@ body {
     border-width: 2px;
 }
 
-/* Icon utility */
 .icon {
     flex-shrink: 0;
 }
@@ -955,7 +930,6 @@ body {
     }
 }
 
-/* Filter Control */
 .filter-control {
     display: flex;
     align-items: center;
@@ -999,7 +973,6 @@ body {
     cursor: help;
 }
 
-/* Safety Badges */
 .file-safety-badge {
     position: absolute;
     top: 12px;

@@ -1,8 +1,3 @@
-/**
- * AI Storage Saver - Frontend Logic
- */
-
-// State
 let currentMode = 'fast';
 let selectedModel = '';
 let scannedFiles = [];
@@ -10,10 +5,8 @@ let displayedFiles = [];
 let selectedFile = null;
 let currentSort = 'size-desc';
 let isScanning = false;
-let abortController = null;
-let showSafeOnly = false;  // Safe to delete filter
+let showSafeOnly = false;
 
-// DOM Elements
 const modelSelect = document.getElementById('modelSelect');
 const toggleBtns = document.querySelectorAll('.toggle-btn');
 const pathGroup = document.getElementById('pathGroup');
@@ -36,13 +29,11 @@ const sortSelect = document.getElementById('sortSelect');
 const filterControl = document.getElementById('filterControl');
 const safeFilterBtn = document.getElementById('safeFilterBtn');
 
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadModels();
     setupEventListeners();
 });
 
-// Load available Ollama models
 async function loadModels() {
     try {
         const response = await fetch('/api/models');
@@ -70,14 +61,11 @@ async function loadModels() {
     }
 }
 
-// Setup event listeners
 function setupEventListeners() {
-    // Model selection
     modelSelect.addEventListener('change', (e) => {
         selectedModel = e.target.value;
     });
 
-    // Scan mode toggle
     toggleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             toggleBtns.forEach(b => b.classList.remove('active'));
@@ -87,39 +75,32 @@ function setupEventListeners() {
         });
     });
 
-    // Scan button
     scanBtn.addEventListener('click', startScan);
 
-    // Sort selection
     sortSelect.addEventListener('change', (e) => {
         currentSort = e.target.value;
         sortAndRenderFiles();
     });
 
-    // Safe filter toggle
     safeFilterBtn.addEventListener('click', () => {
         showSafeOnly = !showSafeOnly;
         safeFilterBtn.classList.toggle('active', showSafeOnly);
         sortAndRenderFiles();
     });
 
-    // Close detail panel
     closePanel.addEventListener('click', () => {
         detailPanel.classList.remove('open');
         selectedFile = null;
     });
 }
 
-// Start file scan
 async function startScan() {
-    // Prevent multiple scans
     if (isScanning) {
         return;
     }
 
     isScanning = true;
 
-    // Determine path text for loading message
     let pathText = 'Downloads, Desktop, Documents...';
     if (currentMode === 'advance' && pathInput.value) {
         pathText = pathInput.value;
@@ -129,7 +110,6 @@ async function startScan() {
 
     showLoading(`Scanning: ${pathText}`);
 
-    // Clear previous results immediately for better UX
     scannedFiles = [];
     displayedFiles = [];
     fileGrid.innerHTML = '';
@@ -166,22 +146,18 @@ async function startScan() {
     }
 }
 
-// Sort and render files
 function sortAndRenderFiles() {
     if (scannedFiles.length === 0) {
         renderEmptyState();
         return;
     }
 
-    // Clone array for sorting
     displayedFiles = [...scannedFiles];
 
-    // Apply safe filter
     if (showSafeOnly) {
         displayedFiles = displayedFiles.filter(f => f.safe_to_delete);
     }
 
-    // Sort based on current selection
     switch (currentSort) {
         case 'size-desc':
             displayedFiles.sort((a, b) => b.size_bytes - a.size_bytes);
@@ -206,7 +182,6 @@ function sortAndRenderFiles() {
     renderFiles(displayedFiles);
 }
 
-// Render empty state
 function renderEmptyState() {
     fileGrid.innerHTML = `
         <div class="empty-state">
@@ -220,14 +195,12 @@ function renderEmptyState() {
     `;
 }
 
-// Update stats display
 function updateStats(count, size) {
     fileCount.textContent = count;
     totalSize.textContent = formatSize(size);
     statsPanel.style.display = 'grid';
 }
 
-// Format file size
 function formatSize(bytes) {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
     let size = bytes;
@@ -241,7 +214,6 @@ function formatSize(bytes) {
     return `${size.toFixed(1)} ${units[unitIndex]}`;
 }
 
-// Get file icon type
 function getFileIconType(extension) {
     const ext = (extension || '').toLowerCase();
     if (['.pdf'].includes(ext)) return 'pdf';
@@ -253,7 +225,6 @@ function getFileIconType(extension) {
     return 'other';
 }
 
-// Get file icon SVG
 function getFileIconSVG(type) {
     const icons = {
         pdf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
@@ -267,7 +238,6 @@ function getFileIconSVG(type) {
     return icons[type] || icons.other;
 }
 
-// Format date
 function formatDate(isoString) {
     const date = new Date(isoString);
     return date.toLocaleDateString('en-US', {
@@ -277,21 +247,18 @@ function formatDate(isoString) {
     });
 }
 
-// Escape HTML to prevent XSS
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
 }
 
-// Render file cards with optimized DOM manipulation
 function renderFiles(files) {
     if (files.length === 0) {
         renderEmptyState();
         return;
     }
 
-    // Use DocumentFragment for better performance
     const fragment = document.createDocumentFragment();
 
     files.forEach(file => {
@@ -323,18 +290,15 @@ function renderFiles(files) {
             </div>
         `;
 
-        // Add click handler directly
         card.addEventListener('click', () => openFileDetails(file));
 
         fragment.appendChild(card);
     });
 
-    // Clear and append all at once
     fileGrid.innerHTML = '';
     fileGrid.appendChild(fragment);
 }
 
-// Open file details panel
 function openFileDetails(file) {
     selectedFile = file;
     const iconType = getFileIconType(file.extension);
@@ -418,7 +382,6 @@ function openFileDetails(file) {
     detailPanel.classList.add('open');
 }
 
-// Open file with system default app
 async function openCurrentFile() {
     if (!selectedFile) return;
     try {
@@ -434,7 +397,6 @@ async function openCurrentFile() {
     }
 }
 
-// Open file location in explorer
 async function openCurrentLocation() {
     if (!selectedFile) return;
     try {
@@ -450,7 +412,6 @@ async function openCurrentLocation() {
     }
 }
 
-// Summarize file with AI
 async function summarizeCurrentFile() {
     if (!selectedFile) return;
     const filepath = selectedFile.path;
@@ -491,7 +452,6 @@ async function summarizeCurrentFile() {
     }
 }
 
-// Delete file
 async function deleteCurrentFile() {
     if (!selectedFile) return;
     const filepath = selectedFile.path;
@@ -508,14 +468,12 @@ async function deleteCurrentFile() {
         const data = await response.json();
 
         if (response.ok) {
-            // Remove from lists and close panel
             scannedFiles = scannedFiles.filter(f => f.path !== filepath);
             displayedFiles = displayedFiles.filter(f => f.path !== filepath);
             renderFiles(displayedFiles);
             detailPanel.classList.remove('open');
             selectedFile = null;
 
-            // Update stats
             const newTotal = scannedFiles.reduce((sum, f) => sum + f.size_bytes, 0);
             updateStats(scannedFiles.length, newTotal);
         } else {
@@ -527,14 +485,12 @@ async function deleteCurrentFile() {
     }
 }
 
-// Show loading overlay
 function showLoading(message) {
     loadingText.textContent = message;
     loadingOverlay.style.display = 'flex';
     scanBtn.disabled = true;
 }
 
-// Hide loading overlay
 function hideLoading() {
     loadingOverlay.style.display = 'none';
     scanBtn.disabled = false;

@@ -1,13 +1,7 @@
-"""
-File Analyzer Module
-Extracts text content from files and generates summaries using Ollama.
-"""
-
 import os
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 
-# Text extraction imports
 try:
     from pypdf import PdfReader
 except ImportError:
@@ -23,7 +17,6 @@ try:
 except ImportError:
     pd = None
 
-# Ollama integration
 try:
     import ollama
 except ImportError:
@@ -31,7 +24,6 @@ except ImportError:
 
 
 def get_available_models() -> List[Dict[str, Any]]:
-    """Get list of available Ollama models."""
     if ollama is None:
         return []
     
@@ -51,7 +43,6 @@ def get_available_models() -> List[Dict[str, Any]]:
 
 
 def extract_text_from_pdf(filepath: str, max_pages: int = 10) -> Optional[str]:
-    """Extract text content from a PDF file."""
     if PdfReader is None:
         return None
     
@@ -67,7 +58,6 @@ def extract_text_from_pdf(filepath: str, max_pages: int = 10) -> Optional[str]:
 
 
 def extract_text_from_docx(filepath: str) -> Optional[str]:
-    """Extract text content from a DOCX file."""
     if Document is None:
         return None
     
@@ -81,7 +71,6 @@ def extract_text_from_docx(filepath: str) -> Optional[str]:
 
 
 def extract_text_from_txt(filepath: str) -> Optional[str]:
-    """Extract text content from a TXT file."""
     try:
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             return f.read()
@@ -91,7 +80,6 @@ def extract_text_from_txt(filepath: str) -> Optional[str]:
 
 
 def extract_text_from_excel(filepath: str) -> Optional[str]:
-    """Extract text content from Excel files."""
     if pd is None:
         return None
     
@@ -104,15 +92,6 @@ def extract_text_from_excel(filepath: str) -> Optional[str]:
 
 
 def extract_text(filepath: str) -> Optional[str]:
-    """
-    Extract text from a file based on its extension.
-    
-    Args:
-        filepath: Path to the file
-        
-    Returns:
-        Extracted text content or None if extraction fails
-    """
     ext = Path(filepath).suffix.lower()
     
     extractors = {
@@ -122,7 +101,7 @@ def extract_text(filepath: str) -> Optional[str]:
         '.txt': extract_text_from_txt,
         '.xlsx': extract_text_from_excel,
         '.xls': extract_text_from_excel,
-        '.csv': lambda f: extract_text_from_txt(f),  # CSV as text
+        '.csv': lambda f: extract_text_from_txt(f),
     }
     
     extractor = extractors.get(ext)
@@ -132,23 +111,12 @@ def extract_text(filepath: str) -> Optional[str]:
 
 
 def summarize_content(text: str, model: str = "llama3.2") -> Optional[str]:
-    """
-    Generate a summary of text content using Ollama.
-    
-    Args:
-        text: Text content to summarize
-        model: Ollama model name to use
-        
-    Returns:
-        Summary text or None if summarization fails
-    """
     if ollama is None:
         return "Ollama not available. Please install and run Ollama."
     
     if not text or len(text.strip()) < 50:
         return "File content is too short to summarize."
     
-    # Truncate very long texts to improve speed
     max_chars = 4000
     if len(text) > max_chars:
         text = text[:max_chars] + "...[truncated]"
@@ -164,19 +132,16 @@ Content:
         response = ollama.chat(
             model=model,
             messages=[{"role": "user", "content": prompt}],
-            options={"num_predict": 512}  # Increase limit to allow "thinking" to finish
+            options={"num_predict": 512}
         )
         content = response['message']['content']
         
-        # Clean up <think> blocks
-        # Handle case where </think> works
         if "</think>" in content:
             content = content.split("</think>")[-1]
             
-        # Regex fallback for other variations
         import re
         content = re.sub(r'<think>.*?</think>', '', content, flags=re.DOTALL)
-        content = re.sub(r'<think>.*', '', content, flags=re.DOTALL) # Remove unclosed think blocks at end
+        content = re.sub(r'<think>.*', '', content, flags=re.DOTALL)
             
         return content.strip()
     except Exception as e:
@@ -184,16 +149,6 @@ Content:
 
 
 def analyze_file(filepath: str, model: str = "llama3.2") -> Dict[str, Any]:
-    """
-    Full analysis of a file: extract text and generate summary.
-    
-    Args:
-        filepath: Path to the file
-        model: Ollama model to use
-        
-    Returns:
-        Dictionary with analysis results
-    """
     result = {
         "filepath": filepath,
         "success": False,
@@ -202,16 +157,13 @@ def analyze_file(filepath: str, model: str = "llama3.2") -> Dict[str, Any]:
         "error": None,
     }
     
-    # Extract text
     text = extract_text(filepath)
     if text is None:
         result["error"] = "Could not extract text from this file type."
         return result
     
-    # Store preview
     result["text_preview"] = text[:500] + "..." if len(text) > 500 else text
     
-    # Generate summary
     summary = summarize_content(text, model)
     result["summary"] = summary
     result["success"] = True
