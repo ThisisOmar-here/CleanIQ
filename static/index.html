@@ -26,7 +26,6 @@
             </div>
 
             <div class="sidebar-content">
-                <!-- Model Selection -->
                 <div class="control-group">
                     <label class="control-label">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -41,7 +40,6 @@
                     </select>
                 </div>
 
-                <!-- Scan Mode -->
                 <div class="control-group">
                     <label class="control-label">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -68,7 +66,6 @@
                     </div>
                 </div>
 
-                <!-- Path Input (for Advanced) -->
                 <div class="control-group" id="pathGroup" style="display: none;">
                     <label class="control-label">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -79,7 +76,6 @@
                     <input type="text" id="pathInput" class="text-input" placeholder="C:\Users\..." value="">
                 </div>
 
-                <!-- Exclude System Files Toggle -->
                 <div class="control-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="excludeSystem" checked>
@@ -88,7 +84,6 @@
                     </label>
                 </div>
 
-                <!-- Scan Button -->
                 <button id="scanBtn" class="primary-btn">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
@@ -96,7 +91,6 @@
                     Start Scan
                 </button>
 
-                <!-- Stats -->
                 <div class="stats-panel" id="statsPanel" style="display: none;">
                     <div class="stat-item">
                         <span class="stat-value" id="fileCount">0</span>
@@ -120,14 +114,12 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Header -->
             <header class="main-header">
                 <div class="header-top">
                     <div class="header-text">
                         <h1 class="page-title">CleanIQ</h1>
                         <p class="page-subtitle" id="statusText">Select a scan mode and click Start Scan</p>
                     </div>
-                    <!-- Safe to Delete Filter -->
                     <div class="filter-control" id="filterControl" style="display: none;">
                         <button id="safeFilterBtn" class="filter-btn"
                             title="Show only cache, temp, and log files that are safe to delete">
@@ -139,7 +131,6 @@
                         <span class="filter-info"
                             title="Filters to show only cache, temp, logs, and other safe-to-delete files. Hides documents, photos, videos, and code.">ⓘ</span>
                     </div>
-                    <!-- Sort Dropdown -->
                     <div class="sort-control" id="sortControl" style="display: none;">
                         <label class="sort-label">Sort by:</label>
                         <select id="sortSelect" class="sort-select">
@@ -154,9 +145,7 @@
                 </div>
             </header>
 
-            <!-- File List -->
             <div class="file-grid" id="fileGrid">
-                <!-- Empty State -->
                 <div class="empty-state" id="emptyState">
                     <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
@@ -167,7 +156,6 @@
                 </div>
             </div>
 
-            <!-- Loading State -->
             <div class="loading-overlay" id="loadingOverlay" style="display: none;">
                 <div class="spinner"></div>
                 <p id="loadingText">Scanning files...</p>
@@ -186,7 +174,6 @@
                 </button>
             </div>
             <div class="panel-content" id="panelContent">
-                <!-- Dynamic content -->
             </div>
         </aside>
     </div>
